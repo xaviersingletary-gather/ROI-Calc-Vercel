@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0C1220;
+  --foreground: #F8FAFC;
 }
 
 @theme inline {
@@ -12,15 +12,95 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ============================================================
+   Custom range slider
+   ============================================================ */
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    to right,
+    #22c55e 0%,
+    #22c55e var(--fill-percent, 50%),
+    #1e293b var(--fill-percent, 50%),
+    #1e293b 100%
+  );
+  outline: none;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #22c55e;
+  cursor: pointer;
+  border: 3px solid #0C1220;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.25);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.2);
+  transform: scale(1.1);
+}
+
+.slider::-webkit-slider-thumb:active {
+  box-shadow: 0 0 0 8px rgba(34, 197, 94, 0.25);
+  transform: scale(1.15);
+}
+
+.slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #22c55e;
+  cursor: pointer;
+  border: 3px solid #0C1220;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.25);
+  transition: box-shadow 0.2s ease;
+}
+
+.slider::-moz-range-thumb:hover {
+  box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.2);
+}
+
+.slider::-moz-range-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    to right,
+    #22c55e 0%,
+    #22c55e var(--fill-percent, 50%),
+    #1e293b var(--fill-percent, 50%),
+    #1e293b 100%
+  );
+}
+
+/* ============================================================
+   Animated savings number
+   ============================================================ */
+
+.savings-number {
+  transition: opacity 0.15s ease;
+}
+
+/* ============================================================
+   Savings proportion bar
+   ============================================================ */
+
+.proportion-bar {
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
