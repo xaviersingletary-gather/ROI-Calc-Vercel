@@ -184,8 +184,8 @@ export default function ROICalculator() {
                 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] leading-tight"
                 style={{ letterSpacing: "-0.03em" }}
               >
-                See what autonomous inventory{" "}
-                <span className="text-[var(--mineral)]">actually saves you</span>
+                See what Gather AI{" "}
+                <span className="text-[var(--mineral)]">can save you</span>
               </h1>
               <p
                 className="mt-3 text-[var(--text-secondary)] leading-relaxed"
