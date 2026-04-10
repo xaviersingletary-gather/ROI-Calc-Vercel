@@ -11,7 +11,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "ROI Calculator | Gather AI",
   description:
-    "See how much you could save with autonomous drone inventory scanning and MHE fleet intelligence.",
+    "See how Gather AI can reduce labor costs across your logistics operation.",
 };
 
 export default function RootLayout({
