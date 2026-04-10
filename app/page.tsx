@@ -99,7 +99,8 @@ export default function ROICalculator() {
   const [laborRate, setLaborRate] = useState(35);
 
   const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   // --- calculations ---
   const droneSavings = useMemo(
@@ -128,10 +129,31 @@ export default function ROICalculator() {
   const dronePct =
     totalSavings > 0 ? (droneSavings / totalSavings) * 100 : 50;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: POST to HubSpot form API or SendGrid
-    setSubmitted(true);
+    setSubmitting(true);
+    try {
+      await fetch("/api/capture", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          palletLocations,
+          cycleCountHours,
+          hoursPerShift,
+          shiftsPerDay,
+          forkliftDrivers,
+          laborRate,
+          droneSavings,
+          mheSavings,
+          totalSavings,
+        }),
+      });
+    } catch {
+      // Show modal regardless — we don't want a backend issue to block the UX
+    }
+    setSubmitting(false);
+    setShowModal(true);
   };
 
   return (
@@ -419,46 +441,32 @@ export default function ROICalculator() {
             profile, and operational targets.
           </p>
 
-          {!submitted ? (
-            <form
-              onSubmit={handleSubmit}
-              className="mt-8 flex flex-col sm:flex-row gap-3 justify-center"
+          <form
+            onSubmit={handleSubmit}
+            className="mt-8 flex flex-col sm:flex-row gap-3 justify-center"
+          >
+            <input
+              type="email"
+              required
+              placeholder="Your work email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="h-12 px-4 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-white placeholder:text-[var(--grey)] focus:outline-none focus:ring-2 focus:border-transparent sm:w-80 transition-shadow"
+              style={
+                {
+                  "--tw-ring-color": "rgba(20, 226, 172, 0.4)",
+                } as React.CSSProperties
+              }
+            />
+            <button
+              type="submit"
+              disabled={submitting}
+              className="h-12 px-8 rounded-xl text-[var(--background)] font-semibold hover:opacity-90 active:opacity-100 transition-opacity cursor-pointer disabled:opacity-60"
+              style={{ backgroundColor: "var(--java)" }}
             >
-              <input
-                type="email"
-                required
-                placeholder="Your work email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="h-12 px-4 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-white placeholder:text-[var(--grey)] focus:outline-none focus:ring-2 focus:border-transparent sm:w-80 transition-shadow"
-                style={
-                  {
-                    "--tw-ring-color": "rgba(20, 226, 172, 0.4)",
-                  } as React.CSSProperties
-                }
-              />
-              <button
-                type="submit"
-                className="h-12 px-8 rounded-xl text-[var(--background)] font-semibold hover:opacity-90 active:opacity-100 transition-opacity cursor-pointer"
-                style={{ backgroundColor: "var(--java)" }}
-              >
-                Get My Report
-              </button>
-            </form>
-          ) : (
-            <div
-              className="mt-8 p-6 rounded-xl border"
-              style={{
-                backgroundColor: "rgba(20, 226, 172, 0.08)",
-                borderColor: "rgba(20, 226, 172, 0.2)",
-              }}
-            >
-              <p style={{ color: "var(--java)" }} className="font-medium">
-                We&apos;ll send a custom analysis to{" "}
-                <span className="text-white">{email}</span> shortly.
-              </p>
-            </div>
-          )}
+              {submitting ? "Sending..." : "Get My Report"}
+            </button>
+          </form>
         </div>
       </section>
 
@@ -474,6 +482,99 @@ export default function ROICalculator() {
           </p>
         </div>
       </footer>
+
+      {/* ── Thank You Modal ── */}
+      {showModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center px-4"
+          onClick={() => setShowModal(false)}
+        >
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+
+          {/* Card */}
+          <div
+            className="relative w-full max-w-md rounded-2xl border border-[var(--border)] p-8 text-center"
+            style={{ backgroundColor: "var(--surface-elevated)" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-4 right-4 text-[var(--grey)] hover:text-white transition-colors cursor-pointer"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+
+            {/* Content */}
+            <div
+              className="w-12 h-12 rounded-full mx-auto flex items-center justify-center mb-5"
+              style={{ backgroundColor: "rgba(20, 226, 172, 0.1)" }}
+            >
+              <svg
+                className="w-6 h-6"
+                style={{ color: "var(--java)" }}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+
+            <h3
+              className="text-xl font-bold text-white"
+              style={{ letterSpacing: "-0.03em" }}
+            >
+              Thanks &mdash; we&apos;ve got your info.
+            </h3>
+
+            <p
+              className="mt-6 text-4xl font-bold tabular-nums"
+              style={{ color: "var(--java)", letterSpacing: "-0.03em" }}
+            >
+              {fmt(totalSavings)}
+            </p>
+            <p className="text-sm text-[var(--grey)] mt-1">
+              your estimated annual savings
+            </p>
+
+            <p
+              className="mt-6 text-sm text-[var(--light-grey)] leading-relaxed"
+              style={{ letterSpacing: "-0.02em" }}
+            >
+              We&apos;ll send a detailed analysis to{" "}
+              <span className="text-white font-medium">{email}</span> within 1
+              business day.
+            </p>
+
+            <button
+              onClick={() => setShowModal(false)}
+              className="mt-8 text-sm font-medium transition-colors cursor-pointer"
+              style={{ color: "var(--java)" }}
+            >
+              Back to calculator
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
