@@ -152,37 +152,26 @@ export default function ROICalculator() {
         </div>
       </header>
 
-      {/* ── Hero ── */}
-      <section className="px-6 pt-16 pb-4 text-center">
-        <div className="max-w-2xl mx-auto">
-          <h1
-            className="text-4xl sm:text-5xl font-bold text-white leading-tight"
-            style={{ letterSpacing: "-0.03em" }}
-          >
-            See what autonomous inventory{" "}
-            <span className="text-[var(--java)]">actually saves you</span>
-          </h1>
-          <p
-            className="mt-4 text-lg text-[var(--light-grey)] max-w-xl mx-auto leading-relaxed"
-            style={{ letterSpacing: "-0.02em" }}
-          >
-            Plug in your numbers. Watch the math work. Drone scanning and MHE
-            intelligence — one view of what they unlock across your floor.
-          </p>
-        </div>
-      </section>
-
-      {/* ── Calculator ── */}
-      <section className="px-6 py-12">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+      {/* ── Hero + Calculator ── */}
+      <section className="px-6 pt-8 pb-12">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14">
           {/* Left: Inputs */}
-          <div className="space-y-8">
-            <h2
-              className="text-xs font-semibold uppercase text-[var(--grey)]"
-              style={{ letterSpacing: "0.1em" }}
-            >
-              Your Operation
-            </h2>
+          <div className="space-y-6">
+            <div>
+              <h1
+                className="text-3xl sm:text-4xl font-bold text-white leading-tight"
+                style={{ letterSpacing: "-0.03em" }}
+              >
+                See what autonomous inventory{" "}
+                <span className="text-[var(--java)]">actually saves you</span>
+              </h1>
+              <p
+                className="mt-2 text-sm text-[var(--light-grey)] leading-relaxed"
+                style={{ letterSpacing: "-0.02em" }}
+              >
+                Plug in your numbers. Watch the math work.
+              </p>
+            </div>
 
             <Slider
               label="Pallet Locations"
@@ -245,7 +234,7 @@ export default function ROICalculator() {
           </div>
 
           {/* Right: Results */}
-          <div className="space-y-6 lg:sticky lg:top-8 lg:self-start">
+          <div className="space-y-5 lg:sticky lg:top-6 lg:self-start">
             <h2
               className="text-xs font-semibold uppercase text-[var(--grey)]"
               style={{ letterSpacing: "0.1em" }}
@@ -254,7 +243,7 @@ export default function ROICalculator() {
             </h2>
 
             {/* Total savings card */}
-            <div className="bg-[var(--mineral)] border border-[var(--java)]/20 rounded-2xl p-8">
+            <div className="bg-[var(--mineral)] border border-[var(--java)]/20 rounded-2xl p-6">
               <p
                 className="text-xs font-semibold uppercase text-[var(--java)]"
                 style={{ letterSpacing: "0.1em" }}
@@ -262,7 +251,7 @@ export default function ROICalculator() {
                 Total Annual Savings
               </p>
               <p
-                className="text-5xl sm:text-6xl font-bold text-white mt-3 tabular-nums"
+                className="text-4xl sm:text-5xl font-bold text-white mt-2 tabular-nums"
                 style={{ letterSpacing: "-0.03em" }}
               >
                 {fmt(totalSavings)}
