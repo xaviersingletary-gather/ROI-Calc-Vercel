@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Image from "next/image";
 
 // ============================================================
 // BAKED-IN ASSUMPTIONS (easy to tune)
@@ -138,16 +139,13 @@ export default function ROICalculator() {
       {/* ── Header ── */}
       <header className="border-b border-[var(--border)] px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-[var(--java)] rounded-lg flex items-center justify-center">
-              <span className="text-[var(--background)] font-bold text-sm">
-                G
-              </span>
-            </div>
-            <span className="text-white font-semibold text-lg" style={{ letterSpacing: "-0.03em" }}>
-              Gather AI
-            </span>
-          </div>
+          <Image
+            src="/gather-logo.svg"
+            alt="Gather AI"
+            width={160}
+            height={24}
+            priority
+          />
           <span className="text-[var(--grey)] text-sm hidden sm:block">
             ROI Calculator
           </span>
