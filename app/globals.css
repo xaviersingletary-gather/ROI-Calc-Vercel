@@ -1,45 +1,49 @@
 @import "tailwindcss";
 
 /* ============================================================
-   Gather AI Brand Tokens
+   Gather AI Brand Tokens — Light Mode
    Primary:   Java #14E2AC | Mineral Green #38544A | White #FFFFFF
    Secondary: Blue #76AEEA | Red #C94B38 | Yellow #D8B958
-              Green #649F49 | Pink #DB7996 | Orange #CE8C46
    Neutrals:  Black #1A1A1C | Grey #8E9094 | Light Grey #CCCDD1
    ============================================================ */
 
 :root {
-  --background: #1A1A1C;
-  --foreground: #FFFFFF;
-
-  /* brand primaries */
   --java: #14E2AC;
+  --java-dim: rgba(20, 226, 172, 0.08);
   --mineral: #38544A;
   --brand-blue: #76AEEA;
+  --brand-blue-dim: rgba(118, 174, 234, 0.08);
 
-  /* brand neutrals */
-  --grey: #8E9094;
-  --light-grey: #CCCDD1;
+  /* light mode surfaces */
+  --background: #FFFFFF;
+  --surface: #F5F6F7;
+  --surface-elevated: #FFFFFF;
+  --border: #E5E6E7;
+  --border-subtle: #EEEFF0;
 
-  /* surfaces */
-  --surface: #242426;
-  --surface-elevated: #2E2E31;
-  --border: #3A3A3D;
+  /* text */
+  --text-primary: #1A1A1C;
+  --text-secondary: #52535A;
+  --text-muted: #8E9094;
+
+  /* dark panel (for total savings card + footer) */
+  --panel-dark: #38544A;
+  --panel-darker: #1A1A1C;
 }
 
 @theme inline {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-foreground: var(--text-primary);
   --font-sans: var(--font-poppins);
 }
 
 body {
   background: var(--background);
-  color: var(--foreground);
+  color: var(--text-primary);
 }
 
 /* ============================================================
-   Custom range slider — Java accent
+   Custom range slider — light mode
    ============================================================ */
 
 .slider {
@@ -69,17 +73,17 @@ body {
   background: var(--java);
   cursor: pointer;
   border: 3px solid var(--background);
-  box-shadow: 0 0 0 2px rgba(20, 226, 172, 0.25);
+  box-shadow: 0 0 0 2px rgba(20, 226, 172, 0.3), 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.2s ease, transform 0.15s ease;
 }
 
 .slider::-webkit-slider-thumb:hover {
-  box-shadow: 0 0 0 6px rgba(20, 226, 172, 0.2);
+  box-shadow: 0 0 0 6px rgba(20, 226, 172, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
   transform: scale(1.1);
 }
 
 .slider::-webkit-slider-thumb:active {
-  box-shadow: 0 0 0 8px rgba(20, 226, 172, 0.25);
+  box-shadow: 0 0 0 8px rgba(20, 226, 172, 0.2), 0 1px 3px rgba(0, 0, 0, 0.1);
   transform: scale(1.15);
 }
 
@@ -90,12 +94,12 @@ body {
   background: var(--java);
   cursor: pointer;
   border: 3px solid var(--background);
-  box-shadow: 0 0 0 2px rgba(20, 226, 172, 0.25);
+  box-shadow: 0 0 0 2px rgba(20, 226, 172, 0.3), 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.2s ease;
 }
 
 .slider::-moz-range-thumb:hover {
-  box-shadow: 0 0 0 6px rgba(20, 226, 172, 0.2);
+  box-shadow: 0 0 0 6px rgba(20, 226, 172, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .slider::-moz-range-track {
@@ -111,7 +115,7 @@ body {
 }
 
 /* ============================================================
-   Savings proportion bar
+   Proportion bar
    ============================================================ */
 
 .proportion-bar {

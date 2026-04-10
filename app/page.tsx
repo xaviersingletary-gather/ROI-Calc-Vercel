@@ -52,10 +52,10 @@ function Slider({
   return (
     <div className="space-y-3">
       <div className="flex justify-between items-baseline">
-        <label className="text-sm font-medium text-[var(--light-grey)]">
+        <label className="text-sm font-medium text-[var(--text-secondary)]">
           {label}
         </label>
-        <span className="text-lg font-semibold text-white tabular-nums">
+        <span className="text-lg font-semibold text-[var(--text-primary)] tabular-nums">
           {prefix}
           {num(value)}
           {unit}
@@ -71,7 +71,7 @@ function Slider({
         className="slider"
         style={{ "--fill-percent": `${pct}%` } as React.CSSProperties}
       />
-      <div className="flex justify-between text-xs text-[var(--grey)]">
+      <div className="flex justify-between text-xs text-[var(--text-muted)]">
         <span>
           {prefix}
           {num(min)}
@@ -159,36 +159,36 @@ export default function ROICalculator() {
   return (
     <div className="min-h-screen bg-[var(--background)]">
       {/* ── Header ── */}
-      <header className="border-b border-[var(--border)] px-6 py-4">
+      <header className="border-b border-[var(--border-subtle)] px-6 py-5">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Image
-            src="/gather-logo.svg"
+            src="/gather-logo-dark.svg"
             alt="Gather AI"
             width={160}
             height={24}
             priority
           />
-          <span className="text-[var(--grey)] text-sm hidden sm:block">
+          <span className="text-[var(--text-muted)] text-sm hidden sm:block">
             ROI Calculator
           </span>
         </div>
       </header>
 
-      {/* ── Hero + Calculator ── */}
-      <section className="px-6 pt-8 pb-12">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14">
+      {/* ── Calculator ── */}
+      <section className="px-6 pt-12 pb-16">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
           {/* Left: Inputs */}
-          <div className="space-y-6">
+          <div className="space-y-7">
             <div>
               <h1
-                className="text-3xl sm:text-4xl font-bold text-white leading-tight"
+                className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] leading-tight"
                 style={{ letterSpacing: "-0.03em" }}
               >
                 See what autonomous inventory{" "}
-                <span className="text-[var(--java)]">actually saves you</span>
+                <span className="text-[var(--mineral)]">actually saves you</span>
               </h1>
               <p
-                className="mt-2 text-sm text-[var(--light-grey)] leading-relaxed"
+                className="mt-3 text-[var(--text-secondary)] leading-relaxed"
                 style={{ letterSpacing: "-0.02em" }}
               >
                 Plug in your numbers. Watch the math work.
@@ -256,16 +256,16 @@ export default function ROICalculator() {
           </div>
 
           {/* Right: Results */}
-          <div className="space-y-5 lg:sticky lg:top-6 lg:self-start">
+          <div className="space-y-5 lg:sticky lg:top-8 lg:self-start">
             <h2
-              className="text-xs font-semibold uppercase text-[var(--grey)]"
+              className="text-xs font-semibold uppercase text-[var(--text-muted)]"
               style={{ letterSpacing: "0.1em" }}
             >
               Estimated Annual Savings
             </h2>
 
-            {/* Total savings card */}
-            <div className="bg-[var(--mineral)] border border-[var(--java)]/20 rounded-2xl p-6">
+            {/* Total savings card — dark panel */}
+            <div className="bg-[var(--panel-dark)] rounded-2xl p-7">
               <p
                 className="text-xs font-semibold uppercase text-[var(--java)]"
                 style={{ letterSpacing: "0.1em" }}
@@ -278,14 +278,14 @@ export default function ROICalculator() {
               >
                 {fmt(totalSavings)}
               </p>
-              <p className="text-[var(--light-grey)] mt-3 text-sm">
+              <p className="text-white/60 mt-3 text-sm">
                 {fmt(totalSavings / 12)}/month &middot;{" "}
                 {fmt(savingsPerLocation)} per pallet location
               </p>
 
               {/* Proportion bar */}
               <div className="mt-6">
-                <div className="flex rounded-full h-3 overflow-hidden bg-[var(--background)]">
+                <div className="flex rounded-full h-2.5 overflow-hidden bg-white/10">
                   <div
                     className="proportion-bar rounded-l-full"
                     style={{
@@ -312,17 +312,13 @@ export default function ROICalculator() {
               </div>
             </div>
 
-            {/* Drone Vision card */}
-            <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6">
+            {/* Drone Vision card — light */}
+            <div className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-6">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: "rgba(20, 226, 172, 0.1)" }}
-                  >
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 bg-[var(--java-dim)]">
                     <svg
-                      className="w-5 h-5"
-                      style={{ color: "var(--java)" }}
+                      className="w-5 h-5 text-[var(--mineral)]"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -336,25 +332,27 @@ export default function ROICalculator() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-white font-semibold">Drone Vision</p>
-                    <p className="text-xs text-[var(--grey)]">
+                    <p className="text-[var(--text-primary)] font-semibold">
+                      Drone Vision
+                    </p>
+                    <p className="text-xs text-[var(--text-muted)]">
                       Autonomous inventory scanning
                     </p>
                   </div>
                 </div>
                 <p
-                  className="text-2xl font-bold tabular-nums"
-                  style={{ color: "var(--java)", letterSpacing: "-0.03em" }}
+                  className="text-2xl font-bold text-[var(--mineral)] tabular-nums"
+                  style={{ letterSpacing: "-0.03em" }}
                 >
                   {fmt(droneSavings)}
                 </p>
               </div>
               <p
-                className="text-sm text-[var(--light-grey)] mt-4 leading-relaxed"
+                className="text-sm text-[var(--text-secondary)] mt-4 leading-relaxed"
                 style={{ letterSpacing: "-0.02em" }}
               >
                 Replaces{" "}
-                <span className="text-white font-medium">
+                <span className="text-[var(--text-primary)] font-medium">
                   {num(cycleCountHours)} hrs/day
                 </span>{" "}
                 of manual cycle counting with autonomous drone scans —
@@ -364,17 +362,13 @@ export default function ROICalculator() {
               </p>
             </div>
 
-            {/* MHE Vision card */}
-            <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6">
+            {/* MHE Vision card — light */}
+            <div className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-6">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: "rgba(118, 174, 234, 0.1)" }}
-                  >
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 bg-[var(--brand-blue-dim)]">
                     <svg
-                      className="w-5 h-5"
-                      style={{ color: "var(--brand-blue)" }}
+                      className="w-5 h-5 text-[var(--brand-blue)]"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -388,8 +382,10 @@ export default function ROICalculator() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-white font-semibold">MHE Vision</p>
-                    <p className="text-xs text-[var(--grey)]">
+                    <p className="text-[var(--text-primary)] font-semibold">
+                      MHE Vision
+                    </p>
+                    <p className="text-xs text-[var(--text-muted)]">
                       Fleet intelligence &amp; productivity
                     </p>
                   </div>
@@ -405,15 +401,15 @@ export default function ROICalculator() {
                 </p>
               </div>
               <p
-                className="text-sm text-[var(--light-grey)] mt-4 leading-relaxed"
+                className="text-sm text-[var(--text-secondary)] mt-4 leading-relaxed"
                 style={{ letterSpacing: "-0.02em" }}
               >
                 Real-time visibility across{" "}
-                <span className="text-white font-medium">
+                <span className="text-[var(--text-primary)] font-medium">
                   {num(forkliftDrivers)} drivers
                 </span>{" "}
                 over{" "}
-                <span className="text-white font-medium">
+                <span className="text-[var(--text-primary)] font-medium">
                   {shiftsPerDay} shift{shiftsPerDay > 1 ? "s" : ""}
                 </span>{" "}
                 — a {Math.round(MHE_PRODUCTIVITY_GAIN * 100)}% productivity
@@ -425,16 +421,16 @@ export default function ROICalculator() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="px-6 py-20">
+      <section className="px-6 py-20 bg-[var(--surface)]">
         <div className="max-w-xl mx-auto text-center">
           <h2
-            className="text-2xl sm:text-3xl font-bold text-white"
+            className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)]"
             style={{ letterSpacing: "-0.03em" }}
           >
             Curious what this looks like at your scale?
           </h2>
           <p
-            className="mt-3 text-[var(--light-grey)] leading-relaxed"
+            className="mt-3 text-[var(--text-secondary)] leading-relaxed"
             style={{ letterSpacing: "-0.02em" }}
           >
             Our team builds a full ROI model around your facilities, inventory
@@ -451,7 +447,7 @@ export default function ROICalculator() {
               placeholder="Your work email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="h-12 px-4 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-white placeholder:text-[var(--grey)] focus:outline-none focus:ring-2 focus:border-transparent sm:w-80 transition-shadow"
+              className="h-12 px-4 rounded-xl bg-white border border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:border-transparent sm:w-80 transition-shadow"
               style={
                 {
                   "--tw-ring-color": "rgba(20, 226, 172, 0.4)",
@@ -461,7 +457,7 @@ export default function ROICalculator() {
             <button
               type="submit"
               disabled={submitting}
-              className="h-12 px-8 rounded-xl text-[var(--background)] font-semibold hover:opacity-90 active:opacity-100 transition-opacity cursor-pointer disabled:opacity-60"
+              className="h-12 px-8 rounded-xl text-[var(--panel-darker)] font-semibold hover:opacity-90 active:opacity-100 transition-opacity cursor-pointer disabled:opacity-60"
               style={{ backgroundColor: "var(--java)" }}
             >
               {submitting ? "Sending..." : "Get My Report"}
@@ -471,15 +467,22 @@ export default function ROICalculator() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-[var(--border)] px-6 py-8">
-        <div className="max-w-7xl mx-auto text-center text-sm text-[var(--grey)]">
-          <p>
-            &copy; {new Date().getFullYear()} Gather AI. All rights reserved.
-          </p>
-          <p className="mt-1">
-            Savings estimates based on industry benchmarks. Actual results vary
-            by operation.
-          </p>
+      <footer className="bg-[var(--panel-darker)] px-6 py-10">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <Image
+            src="/gather-logo.svg"
+            alt="Gather AI"
+            width={120}
+            height={18}
+          />
+          <div className="text-sm text-white/40 text-center sm:text-right">
+            <p>
+              &copy; {new Date().getFullYear()} Gather AI. All rights reserved.
+            </p>
+            <p className="mt-1">
+              Savings estimates based on industry benchmarks.
+            </p>
+          </div>
         </div>
       </footer>
 
@@ -490,18 +493,17 @@ export default function ROICalculator() {
           onClick={() => setShowModal(false)}
         >
           {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
 
           {/* Card */}
           <div
-            className="relative w-full max-w-md rounded-2xl border border-[var(--border)] p-8 text-center"
-            style={{ backgroundColor: "var(--surface-elevated)" }}
+            className="relative w-full max-w-md rounded-2xl border border-[var(--border)] bg-white p-8 text-center shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close button */}
             <button
               onClick={() => setShowModal(false)}
-              className="absolute top-4 right-4 text-[var(--grey)] hover:text-white transition-colors cursor-pointer"
+              className="absolute top-4 right-4 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
             >
               <svg
                 className="w-5 h-5"
@@ -519,13 +521,9 @@ export default function ROICalculator() {
             </button>
 
             {/* Content */}
-            <div
-              className="w-12 h-12 rounded-full mx-auto flex items-center justify-center mb-5"
-              style={{ backgroundColor: "rgba(20, 226, 172, 0.1)" }}
-            >
+            <div className="w-12 h-12 rounded-full mx-auto flex items-center justify-center mb-5 bg-[var(--java-dim)]">
               <svg
-                className="w-6 h-6"
-                style={{ color: "var(--java)" }}
+                className="w-6 h-6 text-[var(--mineral)]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -540,35 +538,36 @@ export default function ROICalculator() {
             </div>
 
             <h3
-              className="text-xl font-bold text-white"
+              className="text-xl font-bold text-[var(--text-primary)]"
               style={{ letterSpacing: "-0.03em" }}
             >
               Thanks &mdash; we&apos;ve got your info.
             </h3>
 
             <p
-              className="mt-6 text-4xl font-bold tabular-nums"
-              style={{ color: "var(--java)", letterSpacing: "-0.03em" }}
+              className="mt-6 text-4xl font-bold text-[var(--mineral)] tabular-nums"
+              style={{ letterSpacing: "-0.03em" }}
             >
               {fmt(totalSavings)}
             </p>
-            <p className="text-sm text-[var(--grey)] mt-1">
+            <p className="text-sm text-[var(--text-muted)] mt-1">
               your estimated annual savings
             </p>
 
             <p
-              className="mt-6 text-sm text-[var(--light-grey)] leading-relaxed"
+              className="mt-6 text-sm text-[var(--text-secondary)] leading-relaxed"
               style={{ letterSpacing: "-0.02em" }}
             >
               We&apos;ll send a detailed analysis to{" "}
-              <span className="text-white font-medium">{email}</span> within 1
-              business day.
+              <span className="text-[var(--text-primary)] font-medium">
+                {email}
+              </span>{" "}
+              within 1 business day.
             </p>
 
             <button
               onClick={() => setShowModal(false)}
-              className="mt-8 text-sm font-medium transition-colors cursor-pointer"
-              style={{ color: "var(--java)" }}
+              className="mt-8 text-sm font-medium text-[var(--mineral)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
             >
               Back to calculator
             </button>
