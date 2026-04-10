@@ -6,8 +6,8 @@ import { useState, useMemo } from "react";
 // BAKED-IN ASSUMPTIONS (easy to tune)
 // ============================================================
 const WORKING_DAYS_PER_YEAR = 260;
-const DRONE_CYCLE_COUNT_ELIMINATION = 0.9; // 90% of manual cycle count labor eliminated
-const MHE_PRODUCTIVITY_GAIN = 0.12; // 12% productivity improvement from fleet visibility
+const DRONE_CYCLE_COUNT_ELIMINATION = 0.9;
+const MHE_PRODUCTIVITY_GAIN = 0.12;
 
 // ============================================================
 // HELPERS
@@ -51,8 +51,10 @@ function Slider({
   return (
     <div className="space-y-3">
       <div className="flex justify-between items-baseline">
-        <label className="text-sm font-medium text-slate-300">{label}</label>
-        <span className="text-lg font-semibold text-white tabular-nums font-mono">
+        <label className="text-sm font-medium text-[var(--light-grey)]">
+          {label}
+        </label>
+        <span className="text-lg font-semibold text-white tabular-nums">
           {prefix}
           {num(value)}
           {unit}
@@ -68,7 +70,7 @@ function Slider({
         className="slider"
         style={{ "--fill-percent": `${pct}%` } as React.CSSProperties}
       />
-      <div className="flex justify-between text-xs text-slate-600">
+      <div className="flex justify-between text-xs text-[var(--grey)]">
         <span>
           {prefix}
           {num(min)}
@@ -88,7 +90,6 @@ function Slider({
 // PAGE
 // ============================================================
 export default function ROICalculator() {
-  // --- inputs ---
   const [palletLocations, setPalletLocations] = useState(50000);
   const [cycleCountHours, setCycleCountHours] = useState(16);
   const [hoursPerShift, setHoursPerShift] = useState(8);
@@ -96,7 +97,6 @@ export default function ROICalculator() {
   const [forkliftDrivers, setForkliftDrivers] = useState(25);
   const [laborRate, setLaborRate] = useState(35);
 
-  // --- email capture ---
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
@@ -127,7 +127,6 @@ export default function ROICalculator() {
   const dronePct =
     totalSavings > 0 ? (droneSavings / totalSavings) * 100 : 50;
 
-  // --- form ---
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: POST to HubSpot form API or SendGrid
@@ -135,19 +134,21 @@ export default function ROICalculator() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0C1220]">
+    <div className="min-h-screen bg-[var(--background)]">
       {/* ── Header ── */}
-      <header className="border-b border-slate-800/60 px-6 py-4">
+      <header className="border-b border-[var(--border)] px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">G</span>
+            <div className="w-8 h-8 bg-[var(--java)] rounded-lg flex items-center justify-center">
+              <span className="text-[var(--background)] font-bold text-sm">
+                G
+              </span>
             </div>
-            <span className="text-white font-semibold text-lg tracking-tight">
+            <span className="text-white font-semibold text-lg" style={{ letterSpacing: "-0.03em" }}>
               Gather AI
             </span>
           </div>
-          <span className="text-slate-500 text-sm hidden sm:block">
+          <span className="text-[var(--grey)] text-sm hidden sm:block">
             ROI Calculator
           </span>
         </div>
@@ -156,13 +157,19 @@ export default function ROICalculator() {
       {/* ── Hero ── */}
       <section className="px-6 pt-16 pb-4 text-center">
         <div className="max-w-2xl mx-auto">
-          <h1 className="text-4xl sm:text-5xl font-bold text-white tracking-tight leading-tight">
-            Calculate your{" "}
-            <span className="text-green-400">warehouse savings</span>
+          <h1
+            className="text-4xl sm:text-5xl font-bold text-white leading-tight"
+            style={{ letterSpacing: "-0.03em" }}
+          >
+            See what autonomous inventory{" "}
+            <span className="text-[var(--java)]">actually saves you</span>
           </h1>
-          <p className="mt-4 text-lg text-slate-400 max-w-xl mx-auto leading-relaxed">
-            See how autonomous drones and MHE fleet intelligence reduce labor
-            costs across your operation.
+          <p
+            className="mt-4 text-lg text-[var(--light-grey)] max-w-xl mx-auto leading-relaxed"
+            style={{ letterSpacing: "-0.02em" }}
+          >
+            Plug in your numbers. Watch the math work. Drone scanning and MHE
+            intelligence — one view of what they unlock across your floor.
           </p>
         </div>
       </section>
@@ -172,7 +179,10 @@ export default function ROICalculator() {
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Left: Inputs */}
           <div className="space-y-8">
-            <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-500">
+            <h2
+              className="text-xs font-semibold uppercase text-[var(--grey)]"
+              style={{ letterSpacing: "0.1em" }}
+            >
               Your Operation
             </h2>
 
@@ -238,40 +248,55 @@ export default function ROICalculator() {
 
           {/* Right: Results */}
           <div className="space-y-6 lg:sticky lg:top-8 lg:self-start">
-            <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-500">
+            <h2
+              className="text-xs font-semibold uppercase text-[var(--grey)]"
+              style={{ letterSpacing: "0.1em" }}
+            >
               Estimated Annual Savings
             </h2>
 
             {/* Total savings card */}
-            <div className="bg-gradient-to-br from-green-500/10 to-emerald-600/5 border border-green-500/20 rounded-2xl p-8">
-              <p className="text-xs font-semibold uppercase tracking-widest text-green-400">
+            <div className="bg-[var(--mineral)] border border-[var(--java)]/20 rounded-2xl p-8">
+              <p
+                className="text-xs font-semibold uppercase text-[var(--java)]"
+                style={{ letterSpacing: "0.1em" }}
+              >
                 Total Annual Savings
               </p>
-              <p className="text-5xl sm:text-6xl font-bold text-white mt-3 tabular-nums font-mono savings-number">
+              <p
+                className="text-5xl sm:text-6xl font-bold text-white mt-3 tabular-nums"
+                style={{ letterSpacing: "-0.03em" }}
+              >
                 {fmt(totalSavings)}
               </p>
-              <p className="text-slate-400 mt-3 text-sm">
+              <p className="text-[var(--light-grey)] mt-3 text-sm">
                 {fmt(totalSavings / 12)}/month &middot;{" "}
                 {fmt(savingsPerLocation)} per pallet location
               </p>
 
               {/* Proportion bar */}
               <div className="mt-6">
-                <div className="flex rounded-full h-3 overflow-hidden bg-slate-800">
+                <div className="flex rounded-full h-3 overflow-hidden bg-[var(--background)]">
                   <div
-                    className="proportion-bar bg-green-500 rounded-l-full"
-                    style={{ width: `${dronePct}%` }}
+                    className="proportion-bar rounded-l-full"
+                    style={{
+                      width: `${dronePct}%`,
+                      backgroundColor: "var(--java)",
+                    }}
                   />
                   <div
-                    className="proportion-bar bg-blue-500 rounded-r-full"
-                    style={{ width: `${100 - dronePct}%` }}
+                    className="proportion-bar rounded-r-full"
+                    style={{
+                      width: `${100 - dronePct}%`,
+                      backgroundColor: "var(--brand-blue)",
+                    }}
                   />
                 </div>
                 <div className="flex justify-between mt-2 text-xs">
-                  <span className="text-green-400">
+                  <span className="text-[var(--java)]">
                     Drone Vision &middot; {Math.round(dronePct)}%
                   </span>
-                  <span className="text-blue-400">
+                  <span className="text-[var(--brand-blue)]">
                     MHE Vision &middot; {Math.round(100 - dronePct)}%
                   </span>
                 </div>
@@ -279,12 +304,16 @@ export default function ROICalculator() {
             </div>
 
             {/* Drone Vision card */}
-            <div className="bg-[#151F30] border border-slate-700/40 rounded-2xl p-6">
+            <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center shrink-0">
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: "rgba(20, 226, 172, 0.1)" }}
+                  >
                     <svg
-                      className="w-5 h-5 text-green-400"
+                      className="w-5 h-5"
+                      style={{ color: "var(--java)" }}
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -299,33 +328,44 @@ export default function ROICalculator() {
                   </div>
                   <div>
                     <p className="text-white font-semibold">Drone Vision</p>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-[var(--grey)]">
                       Autonomous inventory scanning
                     </p>
                   </div>
                 </div>
-                <p className="text-2xl font-bold text-green-400 tabular-nums font-mono">
+                <p
+                  className="text-2xl font-bold tabular-nums"
+                  style={{ color: "var(--java)", letterSpacing: "-0.03em" }}
+                >
                   {fmt(droneSavings)}
                 </p>
               </div>
-              <p className="text-sm text-slate-400 mt-4 leading-relaxed">
+              <p
+                className="text-sm text-[var(--light-grey)] mt-4 leading-relaxed"
+                style={{ letterSpacing: "-0.02em" }}
+              >
                 Replaces{" "}
-                <span className="text-slate-200 font-medium">
+                <span className="text-white font-medium">
                   {num(cycleCountHours)} hrs/day
                 </span>{" "}
-                of manual cycle counting with autonomous drone scans, eliminating{" "}
-                {Math.round(DRONE_CYCLE_COUNT_ELIMINATION * 100)}% of that labor
-                cost.
+                of manual cycle counting with autonomous drone scans —
+                eliminating{" "}
+                {Math.round(DRONE_CYCLE_COUNT_ELIMINATION * 100)}% of that
+                labor cost.
               </p>
             </div>
 
             {/* MHE Vision card */}
-            <div className="bg-[#151F30] border border-slate-700/40 rounded-2xl p-6">
+            <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0">
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: "rgba(118, 174, 234, 0.1)" }}
+                  >
                     <svg
-                      className="w-5 h-5 text-blue-400"
+                      className="w-5 h-5"
+                      style={{ color: "var(--brand-blue)" }}
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -340,26 +380,35 @@ export default function ROICalculator() {
                   </div>
                   <div>
                     <p className="text-white font-semibold">MHE Vision</p>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-[var(--grey)]">
                       Fleet intelligence &amp; productivity
                     </p>
                   </div>
                 </div>
-                <p className="text-2xl font-bold text-blue-400 tabular-nums font-mono">
+                <p
+                  className="text-2xl font-bold tabular-nums"
+                  style={{
+                    color: "var(--brand-blue)",
+                    letterSpacing: "-0.03em",
+                  }}
+                >
                   {fmt(mheSavings)}
                 </p>
               </div>
-              <p className="text-sm text-slate-400 mt-4 leading-relaxed">
+              <p
+                className="text-sm text-[var(--light-grey)] mt-4 leading-relaxed"
+                style={{ letterSpacing: "-0.02em" }}
+              >
                 Real-time visibility across{" "}
-                <span className="text-slate-200 font-medium">
+                <span className="text-white font-medium">
                   {num(forkliftDrivers)} drivers
                 </span>{" "}
                 over{" "}
-                <span className="text-slate-200 font-medium">
+                <span className="text-white font-medium">
                   {shiftsPerDay} shift{shiftsPerDay > 1 ? "s" : ""}
                 </span>{" "}
-                drives a {Math.round(MHE_PRODUCTIVITY_GAIN * 100)}% productivity
-                improvement through optimized routing and utilization.
+                — a {Math.round(MHE_PRODUCTIVITY_GAIN * 100)}% productivity
+                uplift through smarter routing and utilization.
               </p>
             </div>
           </div>
@@ -369,12 +418,18 @@ export default function ROICalculator() {
       {/* ── CTA ── */}
       <section className="px-6 py-20">
         <div className="max-w-xl mx-auto text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white">
-            Want a detailed analysis for your operation?
+          <h2
+            className="text-2xl sm:text-3xl font-bold text-white"
+            style={{ letterSpacing: "-0.03em" }}
+          >
+            Curious what this looks like at your scale?
           </h2>
-          <p className="mt-3 text-slate-400 leading-relaxed">
-            Our team will build a full ROI model customized to your facilities,
-            inventory profile, and operational goals.
+          <p
+            className="mt-3 text-[var(--light-grey)] leading-relaxed"
+            style={{ letterSpacing: "-0.02em" }}
+          >
+            Our team builds a full ROI model around your facilities, inventory
+            profile, and operational targets.
           </p>
 
           {!submitted ? (
@@ -388,18 +443,30 @@ export default function ROICalculator() {
                 placeholder="Your work email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-12 px-4 rounded-xl bg-[#151F30] border border-slate-700/60 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 sm:w-80 transition-shadow"
+                className="h-12 px-4 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-white placeholder:text-[var(--grey)] focus:outline-none focus:ring-2 focus:border-transparent sm:w-80 transition-shadow"
+                style={
+                  {
+                    "--tw-ring-color": "rgba(20, 226, 172, 0.4)",
+                  } as React.CSSProperties
+                }
               />
               <button
                 type="submit"
-                className="h-12 px-8 rounded-xl bg-green-500 text-white font-semibold hover:bg-green-400 active:bg-green-600 transition-colors cursor-pointer"
+                className="h-12 px-8 rounded-xl text-[var(--background)] font-semibold hover:opacity-90 active:opacity-100 transition-opacity cursor-pointer"
+                style={{ backgroundColor: "var(--java)" }}
               >
                 Get My Report
               </button>
             </form>
           ) : (
-            <div className="mt-8 p-6 rounded-xl bg-green-500/10 border border-green-500/20">
-              <p className="text-green-400 font-medium">
+            <div
+              className="mt-8 p-6 rounded-xl border"
+              style={{
+                backgroundColor: "rgba(20, 226, 172, 0.08)",
+                borderColor: "rgba(20, 226, 172, 0.2)",
+              }}
+            >
+              <p style={{ color: "var(--java)" }} className="font-medium">
                 We&apos;ll send a custom analysis to{" "}
                 <span className="text-white">{email}</span> shortly.
               </p>
@@ -409,8 +476,8 @@ export default function ROICalculator() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-slate-800/60 px-6 py-8">
-        <div className="max-w-7xl mx-auto text-center text-sm text-slate-600">
+      <footer className="border-t border-[var(--border)] px-6 py-8">
+        <div className="max-w-7xl mx-auto text-center text-sm text-[var(--grey)]">
           <p>
             &copy; {new Date().getFullYear()} Gather AI. All rights reserved.
           </p>
