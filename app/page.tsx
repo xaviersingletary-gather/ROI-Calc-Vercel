@@ -98,10 +98,6 @@ export default function ROICalculator() {
   const [forkliftDrivers, setForkliftDrivers] = useState(25);
   const [laborRate, setLaborRate] = useState(35);
 
-  const [email, setEmail] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-
   // --- calculations ---
   const droneSavings = useMemo(
     () =>
@@ -128,33 +124,6 @@ export default function ROICalculator() {
     palletLocations > 0 ? totalSavings / palletLocations : 0;
   const dronePct =
     totalSavings > 0 ? (droneSavings / totalSavings) * 100 : 50;
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    try {
-      await fetch("/api/capture", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          palletLocations,
-          cycleCountHours,
-          hoursPerShift,
-          shiftsPerDay,
-          forkliftDrivers,
-          laborRate,
-          droneSavings,
-          mheSavings,
-          totalSavings,
-        }),
-      });
-    } catch {
-      // Show modal regardless — we don't want a backend issue to block the UX
-    }
-    setSubmitting(false);
-    setShowModal(true);
-  };
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -437,32 +406,14 @@ export default function ROICalculator() {
             profile, and operational targets.
           </p>
 
-          <form
-            onSubmit={handleSubmit}
-            className="mt-8 flex flex-col sm:flex-row gap-3 justify-center"
-          >
-            <input
-              type="email"
-              required
-              placeholder="Your work email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="h-12 px-4 rounded-xl bg-white border border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:border-transparent sm:w-80 transition-shadow"
-              style={
-                {
-                  "--tw-ring-color": "rgba(20, 226, 172, 0.4)",
-                } as React.CSSProperties
-              }
+          <div className="mt-8">
+            <div
+              className="hs-form-frame"
+              data-region="na1"
+              data-form-id="03065de6-7378-4455-bcc4-bce765e7bf90"
+              data-portal-id="22676744"
             />
-            <button
-              type="submit"
-              disabled={submitting}
-              className="h-12 px-8 rounded-xl text-[var(--panel-darker)] font-semibold hover:opacity-90 active:opacity-100 transition-opacity cursor-pointer disabled:opacity-60"
-              style={{ backgroundColor: "var(--java)" }}
-            >
-              {submitting ? "Sending..." : "Get My Report"}
-            </button>
-          </form>
+          </div>
         </div>
       </section>
 
@@ -486,94 +437,6 @@ export default function ROICalculator() {
         </div>
       </footer>
 
-      {/* ── Thank You Modal ── */}
-      {showModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center px-4"
-          onClick={() => setShowModal(false)}
-        >
-          {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
-
-          {/* Card */}
-          <div
-            className="relative w-full max-w-md rounded-2xl border border-[var(--border)] bg-white p-8 text-center shadow-xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close button */}
-            <button
-              onClick={() => setShowModal(false)}
-              className="absolute top-4 right-4 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-
-            {/* Content */}
-            <div className="w-12 h-12 rounded-full mx-auto flex items-center justify-center mb-5 bg-[var(--java-dim)]">
-              <svg
-                className="w-6 h-6 text-[var(--mineral)]"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            </div>
-
-            <h3
-              className="text-xl font-bold text-[var(--text-primary)]"
-              style={{ letterSpacing: "-0.03em" }}
-            >
-              Thanks &mdash; we&apos;ve got your info.
-            </h3>
-
-            <p
-              className="mt-6 text-4xl font-bold text-[var(--mineral)] tabular-nums"
-              style={{ letterSpacing: "-0.03em" }}
-            >
-              {fmt(totalSavings)}
-            </p>
-            <p className="text-sm text-[var(--text-muted)] mt-1">
-              your estimated annual savings
-            </p>
-
-            <p
-              className="mt-6 text-sm text-[var(--text-secondary)] leading-relaxed"
-              style={{ letterSpacing: "-0.02em" }}
-            >
-              We&apos;ll send a detailed analysis to{" "}
-              <span className="text-[var(--text-primary)] font-medium">
-                {email}
-              </span>{" "}
-              within 1 business day.
-            </p>
-
-            <button
-              onClick={() => setShowModal(false)}
-              className="mt-8 text-sm font-medium text-[var(--mineral)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
-            >
-              Back to calculator
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
