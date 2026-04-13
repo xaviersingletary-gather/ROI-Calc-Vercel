@@ -188,26 +188,28 @@ export default function ROICalculator() {
 
       {/* ── Calculator ── */}
       <section className="px-6 pt-12 pb-16">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-          {/* Left: Inputs */}
-          <div className="space-y-7">
-            <div>
-              <h1
-                className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] leading-tight"
-                style={{ letterSpacing: "-0.03em" }}
-              >
-                Your warehouse. Your numbers.{" "}
-                <span className="text-[var(--mineral)]">Your ROI.</span>
-              </h1>
-              <p
-                className="mt-3 text-[var(--text-secondary)] leading-relaxed"
-                style={{ letterSpacing: "-0.02em" }}
-              >
-                Plug in your numbers. Watch the math work.
-              </p>
-            </div>
+        <div className="max-w-6xl mx-auto">
+          {/* Headline — full width on all breakpoints, always at top */}
+          <div className="mb-10 lg:mb-12 max-w-2xl">
+            <h1
+              className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] leading-tight"
+              style={{ letterSpacing: "-0.03em" }}
+            >
+              Your warehouse. Your numbers.{" "}
+              <span className="text-[var(--mineral)]">Your ROI.</span>
+            </h1>
+            <p
+              className="mt-3 text-[var(--text-secondary)] leading-relaxed"
+              style={{ letterSpacing: "-0.02em" }}
+            >
+              Plug in your numbers. Watch the math work.
+            </p>
+          </div>
 
-            <Slider
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+            {/* Inputs — second on mobile, first on desktop */}
+            <div className="space-y-7 order-2 lg:order-1">
+              <Slider
               label="Pallet Locations"
               value={palletLocations}
               min={1000}
@@ -267,8 +269,8 @@ export default function ROICalculator() {
             />
           </div>
 
-          {/* Right: Results */}
-          <div className="space-y-5 lg:sticky lg:top-8 lg:self-start">
+            {/* Results — first on mobile, second on desktop (sticky) */}
+            <div className="space-y-5 order-1 lg:order-2 lg:sticky lg:top-8 lg:self-start">
             <h2
               className="text-xs font-semibold uppercase text-[var(--text-muted)]"
               style={{ letterSpacing: "0.1em" }}
@@ -549,6 +551,7 @@ export default function ROICalculator() {
                 {Math.round(MHE_PRODUCTIVITY_GAIN * 100)}% productivity uplift.
               </p>
             </div>
+          </div>
           </div>
         </div>
       </section>
