@@ -98,6 +98,15 @@ export default function ROICalculator() {
   const [forkliftDrivers, setForkliftDrivers] = useState(25);
   const [laborRate, setLaborRate] = useState(35);
 
+  // --- form state ---
+  const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [consentError, setConsentError] = useState("");
+  const [submitError, setSubmitError] = useState("");
+
   // --- calculations ---
   const droneSavings = useMemo(
     () =>
@@ -124,6 +133,40 @@ export default function ROICalculator() {
     palletLocations > 0 ? totalSavings / palletLocations : 0;
   const dronePct =
     totalSavings > 0 ? (droneSavings / totalSavings) * 100 : 50;
+
+  // --- submit handler ---
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setSubmitError("");
+
+    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    setEmailError(emailValid ? "" : "Please enter a valid email.");
+    setConsentError(consent ? "" : "Please agree to continue.");
+    if (!emailValid || !consent) return;
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/hubspot-submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email.trim(),
+          consent,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Submission failed");
+      }
+      setSubmitted(true);
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : "Something went wrong."
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -423,13 +466,123 @@ export default function ROICalculator() {
             profile, and operational targets.
           </p>
 
-          <div className="mt-8">
-            <div
-              className="hs-form-frame"
-              data-region="na1"
-              data-form-id="03065de6-7378-4455-bcc4-bce765e7bf90"
-              data-portal-id="22676744"
-            />
+          <div className="mt-8 text-left">
+            {submitted ? (
+              <div className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-7 text-center">
+                <div className="w-12 h-12 rounded-full bg-[var(--java-dim)] flex items-center justify-center mx-auto">
+                  <svg
+                    className="w-6 h-6 text-[var(--mineral)]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                    />
+                  </svg>
+                </div>
+                <p
+                  className="mt-4 text-xl font-semibold text-[var(--text-primary)]"
+                  style={{ letterSpacing: "-0.02em" }}
+                >
+                  Thanks. We&rsquo;ve got your info.
+                </p>
+                <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
+                  A Gather AI specialist will reach out within 1 business day
+                  to build a validated model around{" "}
+                  <span className="font-medium text-[var(--text-primary)]">
+                    {fmt(totalSavings)}
+                  </span>{" "}
+                  in estimated annual savings.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} noValidate className="space-y-4">
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-[var(--text-secondary)] mb-2"
+                    style={{ letterSpacing: "-0.01em" }}
+                  >
+                    Work email{" "}
+                    <span className="text-[#C94B38]" aria-hidden>
+                      *
+                    </span>
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    autoComplete="email"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (emailError) setEmailError("");
+                    }}
+                    aria-invalid={!!emailError}
+                    aria-describedby={emailError ? "email-error" : undefined}
+                    className={`w-full px-4 py-3 bg-[var(--background)] border rounded-xl text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--java)] focus:ring-[3px] focus:ring-[var(--java)]/20 transition-[border-color,box-shadow] ${
+                      emailError
+                        ? "border-[#C94B38]"
+                        : "border-[var(--border)]"
+                    }`}
+                    placeholder="you@company.com"
+                  />
+                  {emailError && (
+                    <p
+                      id="email-error"
+                      className="mt-1.5 text-xs text-[#C94B38]"
+                    >
+                      {emailError}
+                    </p>
+                  )}
+                </div>
+
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={consent}
+                    onChange={(e) => {
+                      setConsent(e.target.checked);
+                      if (consentError && e.target.checked) setConsentError("");
+                    }}
+                    aria-invalid={!!consentError}
+                    aria-describedby={
+                      consentError ? "consent-error" : undefined
+                    }
+                    className="mt-1 h-4 w-4 rounded border-[var(--border)] text-[var(--java)] focus:ring-[var(--java)] cursor-pointer accent-[var(--java)]"
+                  />
+                  <span className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                    I agree to receive other communications from Gather AI.
+                    You can unsubscribe any time. By clicking submit, you agree
+                    to Gather AI storing your information to send you what you
+                    asked for.
+                  </span>
+                </label>
+                {consentError && (
+                  <p id="consent-error" className="text-xs text-[#C94B38]">
+                    {consentError}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full bg-[var(--java)] text-[var(--panel-darker)] font-semibold py-3.5 px-5 rounded-xl hover:brightness-95 transition-[filter,transform] active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
+                  style={{ letterSpacing: "-0.01em" }}
+                >
+                  {submitting ? "Submitting\u2026" : "Build my ROI model"}
+                </button>
+
+                {submitError && (
+                  <p className="text-xs text-[#C94B38] text-center">
+                    {submitError}
+                  </p>
+                )}
+              </form>
+            )}
           </div>
         </div>
       </section>
