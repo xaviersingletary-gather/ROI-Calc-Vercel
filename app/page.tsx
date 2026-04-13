@@ -471,7 +471,7 @@ export default function ROICalculator() {
                       Drone Vision
                     </p>
                     <p className="text-xs text-[var(--text-muted)]">
-                      Automated drone cycle counts
+                      Autonomous Floor Visibility
                     </p>
                   </div>
                 </div>
