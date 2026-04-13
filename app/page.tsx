@@ -207,8 +207,8 @@ export default function ROICalculator() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-            {/* Inputs — second on mobile, first on desktop */}
-            <div className="space-y-7 order-2 lg:order-1">
+            {/* Inputs — first on both breakpoints (natural DOM order) */}
+            <div className="space-y-7">
               <Slider
               label="Pallet Locations"
               value={palletLocations}
@@ -269,17 +269,17 @@ export default function ROICalculator() {
             />
           </div>
 
-            {/* Results — first on mobile, second on desktop (sticky) */}
-            <div className="space-y-5 order-1 lg:order-2 lg:sticky lg:top-8 lg:self-start">
+            {/* Results — second on both; mobile reorders children so CTA lands last */}
+            <div className="flex flex-col gap-5 lg:sticky lg:top-8 lg:self-start">
             <h2
-              className="text-xs font-semibold uppercase text-[var(--text-muted)]"
+              className="hidden lg:block text-xs font-semibold uppercase text-[var(--text-muted)] lg:order-1"
               style={{ letterSpacing: "0.1em" }}
             >
               Annual Savings
             </h2>
 
-            {/* Total savings card — dark panel */}
-            <div className="bg-[var(--panel-dark)] rounded-2xl p-7">
+            {/* Total savings card + form — last on mobile (the CTA), first on desktop */}
+            <div className="bg-[var(--panel-dark)] rounded-2xl p-7 order-3 lg:order-2">
               <p
                 className="text-xs font-semibold uppercase text-[var(--java)]"
                 style={{ letterSpacing: "0.1em" }}
@@ -447,8 +447,8 @@ export default function ROICalculator() {
               </div>
             </div>
 
-            {/* Drone Vision card — light */}
-            <div className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-6">
+            {/* Drone Vision card — first on mobile, middle on desktop */}
+            <div className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-6 order-1 lg:order-3">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 bg-[var(--java-dim)]">
@@ -497,8 +497,8 @@ export default function ROICalculator() {
               </p>
             </div>
 
-            {/* MHE Vision card — light */}
-            <div className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-6">
+            {/* MHE Vision card — second on mobile, last on desktop */}
+            <div className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-6 order-2 lg:order-4">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 bg-[var(--brand-blue-dim)]">
