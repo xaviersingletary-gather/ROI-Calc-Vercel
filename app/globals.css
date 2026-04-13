@@ -121,3 +121,142 @@ body {
 .proportion-bar {
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* ============================================================
+   HubSpot form — brand override
+   Targets classes emitted by js.hsforms.net embed (light DOM).
+   ============================================================ */
+
+.hs-form-frame form {
+  font-family: var(--font-sans);
+  text-align: left;
+}
+
+.hs-form-frame .hs-form-field {
+  margin-bottom: 1.25rem;
+}
+
+.hs-form-frame label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.hs-form-frame .hs-form-required {
+  color: #C94B38;
+  margin-left: 0.125rem;
+}
+
+.hs-form-frame input[type="text"],
+.hs-form-frame input[type="email"],
+.hs-form-frame input[type="tel"],
+.hs-form-frame input[type="number"],
+.hs-form-frame input[type="url"],
+.hs-form-frame select,
+.hs-form-frame textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.4;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.hs-form-frame input::placeholder,
+.hs-form-frame textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.hs-form-frame input:focus,
+.hs-form-frame select:focus,
+.hs-form-frame textarea:focus {
+  outline: none;
+  border-color: var(--java);
+  box-shadow: 0 0 0 3px rgba(20, 226, 172, 0.18);
+}
+
+.hs-form-frame textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.hs-form-frame .hs-button,
+.hs-form-frame input[type="submit"] {
+  width: 100%;
+  background: var(--java);
+  color: var(--panel-darker);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.875rem 1.25rem;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.1s ease;
+  letter-spacing: -0.01em;
+  margin-top: 0.5rem;
+}
+
+.hs-form-frame .hs-button:hover,
+.hs-form-frame input[type="submit"]:hover {
+  filter: brightness(0.95);
+}
+
+.hs-form-frame .hs-button:active,
+.hs-form-frame input[type="submit"]:active {
+  transform: scale(0.99);
+}
+
+.hs-form-frame .hs-error-msg,
+.hs-form-frame .hs-error-msgs,
+.hs-form-frame .hs-error-msgs label {
+  color: #C94B38;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  margin-top: 0.375rem;
+}
+
+.hs-form-frame input.invalid,
+.hs-form-frame input.error,
+.hs-form-frame .invalid input,
+.hs-form-frame .error input {
+  border-color: #C94B38;
+}
+
+/* Consent, legal copy, and descriptions */
+.hs-form-frame .legal-consent-container,
+.hs-form-frame .hs-richtext,
+.hs-form-frame .hs-field-desc {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+
+.hs-form-frame .legal-consent-container a,
+.hs-form-frame .hs-richtext a {
+  color: var(--mineral);
+  text-decoration: underline;
+}
+
+/* Post-submit thank-you message */
+.hs-form-frame .submitted-message {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  font-size: 1rem;
+  line-height: 1.6;
+  padding: 1.5rem;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  text-align: center;
+}
