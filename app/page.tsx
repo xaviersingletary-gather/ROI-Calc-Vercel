@@ -323,19 +323,126 @@ export default function ROICalculator() {
                 </div>
               </div>
 
-              <a
-                href="#build-my-model"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document
-                    .getElementById("build-my-model")
-                    ?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }}
-                className="mt-6 block w-full text-center bg-[var(--java)] text-[var(--panel-darker)] font-semibold py-3.5 px-5 rounded-xl hover:brightness-95 transition-[filter,transform] active:scale-[0.99]"
-                style={{ letterSpacing: "-0.01em" }}
-              >
-                Build my ROI model
-              </a>
+              {/* Nested form — always visible inside the dark panel */}
+              <div className="mt-6 pt-6 border-t border-white/10">
+                {submitted ? (
+                  <div className="text-center py-2">
+                    <div className="w-10 h-10 rounded-full bg-[var(--java)]/20 flex items-center justify-center mx-auto">
+                      <svg
+                        className="w-5 h-5 text-[var(--java)]"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M4.5 12.75l6 6 9-13.5"
+                        />
+                      </svg>
+                    </div>
+                    <p
+                      className="mt-3 text-base font-semibold text-white"
+                      style={{ letterSpacing: "-0.02em" }}
+                    >
+                      Thanks. We&rsquo;ve got your info.
+                    </p>
+                    <p className="mt-1.5 text-xs text-white/70 leading-relaxed">
+                      A Gather AI specialist will reach out within 1 business
+                      day to walk through {fmt(totalSavings)} in estimated
+                      annual savings.
+                    </p>
+                  </div>
+                ) : (
+                  <form
+                    onSubmit={handleSubmit}
+                    noValidate
+                    className="space-y-3"
+                  >
+                    <div>
+                      <label
+                        htmlFor="email"
+                        className="block text-xs font-medium text-white/80 mb-1.5"
+                        style={{ letterSpacing: "-0.01em" }}
+                      >
+                        Enter your work email to get a validated model
+                      </label>
+                      <input
+                        id="email"
+                        type="email"
+                        autoComplete="email"
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          if (emailError) setEmailError("");
+                        }}
+                        aria-invalid={!!emailError}
+                        aria-describedby={
+                          emailError ? "email-error" : undefined
+                        }
+                        className={`w-full px-3.5 py-2.5 bg-white border rounded-lg text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-[3px] focus:ring-[var(--java)]/30 transition-[border-color,box-shadow] ${
+                          emailError
+                            ? "border-[#C94B38]"
+                            : "border-transparent"
+                        }`}
+                        placeholder="you@company.com"
+                      />
+                      {emailError && (
+                        <p
+                          id="email-error"
+                          className="mt-1 text-xs text-[#FF9285]"
+                        >
+                          {emailError}
+                        </p>
+                      )}
+                    </div>
+
+                    <label className="flex items-start gap-2.5 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={consent}
+                        onChange={(e) => {
+                          setConsent(e.target.checked);
+                          if (consentError && e.target.checked)
+                            setConsentError("");
+                        }}
+                        aria-invalid={!!consentError}
+                        aria-describedby={
+                          consentError ? "consent-error" : undefined
+                        }
+                        className="mt-0.5 h-3.5 w-3.5 rounded cursor-pointer accent-[var(--java)]"
+                      />
+                      <span className="text-[11px] text-white/60 leading-snug">
+                        I agree to receive other communications from Gather AI.
+                        You can unsubscribe any time. By clicking submit, you
+                        agree to Gather AI storing your information to send you
+                        what you asked for.
+                      </span>
+                    </label>
+                    {consentError && (
+                      <p id="consent-error" className="text-xs text-[#FF9285]">
+                        {consentError}
+                      </p>
+                    )}
+
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="w-full bg-[var(--java)] text-[var(--panel-darker)] font-semibold py-3 px-5 rounded-lg hover:brightness-95 transition-[filter,transform] active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
+                      style={{ letterSpacing: "-0.01em" }}
+                    >
+                      {submitting ? "Submitting\u2026" : "Build my ROI model"}
+                    </button>
+
+                    {submitError && (
+                      <p className="text-xs text-[#FF9285] text-center">
+                        {submitError}
+                      </p>
+                    )}
+                  </form>
+                )}
+              </div>
             </div>
 
             {/* Drone Vision card — light */}
@@ -442,147 +549,6 @@ export default function ROICalculator() {
                 {Math.round(MHE_PRODUCTIVITY_GAIN * 100)}% productivity uplift.
               </p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ── */}
-      <section
-        id="build-my-model"
-        className="px-6 py-20 bg-[var(--surface)] scroll-mt-8"
-      >
-        <div className="max-w-xl mx-auto text-center">
-          <h2
-            className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)]"
-            style={{ letterSpacing: "-0.03em" }}
-          >
-            Curious what this looks like at your scale?
-          </h2>
-          <p
-            className="mt-3 text-[var(--text-secondary)] leading-relaxed"
-            style={{ letterSpacing: "-0.02em" }}
-          >
-            Our team builds a full ROI model around your facilities, inventory
-            profile, and operational targets.
-          </p>
-
-          <div className="mt-8 text-left">
-            {submitted ? (
-              <div className="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-7 text-center">
-                <div className="w-12 h-12 rounded-full bg-[var(--java-dim)] flex items-center justify-center mx-auto">
-                  <svg
-                    className="w-6 h-6 text-[var(--mineral)]"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2.5}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M4.5 12.75l6 6 9-13.5"
-                    />
-                  </svg>
-                </div>
-                <p
-                  className="mt-4 text-xl font-semibold text-[var(--text-primary)]"
-                  style={{ letterSpacing: "-0.02em" }}
-                >
-                  Thanks. We&rsquo;ve got your info.
-                </p>
-                <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
-                  A Gather AI specialist will reach out within 1 business day
-                  to build a validated model around{" "}
-                  <span className="font-medium text-[var(--text-primary)]">
-                    {fmt(totalSavings)}
-                  </span>{" "}
-                  in estimated annual savings.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} noValidate className="space-y-4">
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-[var(--text-secondary)] mb-2"
-                    style={{ letterSpacing: "-0.01em" }}
-                  >
-                    Work email{" "}
-                    <span className="text-[#C94B38]" aria-hidden>
-                      *
-                    </span>
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    autoComplete="email"
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      if (emailError) setEmailError("");
-                    }}
-                    aria-invalid={!!emailError}
-                    aria-describedby={emailError ? "email-error" : undefined}
-                    className={`w-full px-4 py-3 bg-[var(--background)] border rounded-xl text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--java)] focus:ring-[3px] focus:ring-[var(--java)]/20 transition-[border-color,box-shadow] ${
-                      emailError
-                        ? "border-[#C94B38]"
-                        : "border-[var(--border)]"
-                    }`}
-                    placeholder="you@company.com"
-                  />
-                  {emailError && (
-                    <p
-                      id="email-error"
-                      className="mt-1.5 text-xs text-[#C94B38]"
-                    >
-                      {emailError}
-                    </p>
-                  )}
-                </div>
-
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={consent}
-                    onChange={(e) => {
-                      setConsent(e.target.checked);
-                      if (consentError && e.target.checked) setConsentError("");
-                    }}
-                    aria-invalid={!!consentError}
-                    aria-describedby={
-                      consentError ? "consent-error" : undefined
-                    }
-                    className="mt-1 h-4 w-4 rounded border-[var(--border)] text-[var(--java)] focus:ring-[var(--java)] cursor-pointer accent-[var(--java)]"
-                  />
-                  <span className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                    I agree to receive other communications from Gather AI.
-                    You can unsubscribe any time. By clicking submit, you agree
-                    to Gather AI storing your information to send you what you
-                    asked for.
-                  </span>
-                </label>
-                {consentError && (
-                  <p id="consent-error" className="text-xs text-[#C94B38]">
-                    {consentError}
-                  </p>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="w-full bg-[var(--java)] text-[var(--panel-darker)] font-semibold py-3.5 px-5 rounded-xl hover:brightness-95 transition-[filter,transform] active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
-                  style={{ letterSpacing: "-0.01em" }}
-                >
-                  {submitting ? "Submitting\u2026" : "Build my ROI model"}
-                </button>
-
-                {submitError && (
-                  <p className="text-xs text-[#C94B38] text-center">
-                    {submitError}
-                  </p>
-                )}
-              </form>
-            )}
           </div>
         </div>
       </section>
