@@ -153,8 +153,8 @@ export default function ROICalculator() {
                 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] leading-tight"
                 style={{ letterSpacing: "-0.03em" }}
               >
-                See what Gather AI{" "}
-                <span className="text-[var(--mineral)]">can save you</span>
+                Your warehouse. Your numbers.{" "}
+                <span className="text-[var(--mineral)]">Your ROI.</span>
               </h1>
               <p
                 className="mt-3 text-[var(--text-secondary)] leading-relaxed"
@@ -230,7 +230,7 @@ export default function ROICalculator() {
               className="text-xs font-semibold uppercase text-[var(--text-muted)]"
               style={{ letterSpacing: "0.1em" }}
             >
-              Estimated Annual Savings
+              Annual Savings
             </h2>
 
             {/* Total savings card — dark panel */}
@@ -279,6 +279,20 @@ export default function ROICalculator() {
                   </span>
                 </div>
               </div>
+
+              <a
+                href="#build-my-model"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document
+                    .getElementById("build-my-model")
+                    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                className="mt-6 block w-full text-center bg-[var(--java)] text-[var(--panel-darker)] font-semibold py-3.5 px-5 rounded-xl hover:brightness-95 transition-[filter,transform] active:scale-[0.99]"
+                style={{ letterSpacing: "-0.01em" }}
+              >
+                Build my ROI model
+              </a>
             </div>
 
             {/* Drone Vision card — light */}
@@ -305,7 +319,7 @@ export default function ROICalculator() {
                       Drone Vision
                     </p>
                     <p className="text-xs text-[var(--text-muted)]">
-                      Autonomous inventory scanning
+                      Automated drone cycle counts
                     </p>
                   </div>
                 </div>
@@ -324,10 +338,10 @@ export default function ROICalculator() {
                 <span className="text-[var(--text-primary)] font-medium">
                   {num(cycleCountHours)} hrs/day
                 </span>{" "}
-                of manual cycle counting with autonomous drone scans —
-                eliminating{" "}
-                {Math.round(DRONE_CYCLE_COUNT_ELIMINATION * 100)}% of that
-                labor cost.
+                of manual cycle counting with automated drone scans up to 15x
+                faster. That eliminates{" "}
+                {Math.round(DRONE_CYCLE_COUNT_ELIMINATION * 100)}% of the
+                associated labor cost.
               </p>
             </div>
 
@@ -355,7 +369,7 @@ export default function ROICalculator() {
                       MHE Vision
                     </p>
                     <p className="text-xs text-[var(--text-muted)]">
-                      Fleet intelligence &amp; productivity
+                      Dock-to-dock pallet visibility
                     </p>
                   </div>
                 </div>
@@ -373,16 +387,16 @@ export default function ROICalculator() {
                 className="text-sm text-[var(--text-secondary)] mt-4 leading-relaxed"
                 style={{ letterSpacing: "-0.02em" }}
               >
-                Real-time visibility across{" "}
+                MHE-mounted cameras capture every pallet move across{" "}
                 <span className="text-[var(--text-primary)] font-medium">
                   {num(forkliftDrivers)} drivers
                 </span>{" "}
-                over{" "}
+                and{" "}
                 <span className="text-[var(--text-primary)] font-medium">
                   {shiftsPerDay} shift{shiftsPerDay > 1 ? "s" : ""}
-                </span>{" "}
-                — a {Math.round(MHE_PRODUCTIVITY_GAIN * 100)}% productivity
-                uplift through smarter routing and utilization.
+                </span>
+                . Optimized routes and balanced workloads drive a{" "}
+                {Math.round(MHE_PRODUCTIVITY_GAIN * 100)}% productivity uplift.
               </p>
             </div>
           </div>
@@ -390,7 +404,10 @@ export default function ROICalculator() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="px-6 py-20 bg-[var(--surface)]">
+      <section
+        id="build-my-model"
+        className="px-6 py-20 bg-[var(--surface)] scroll-mt-8"
+      >
         <div className="max-w-xl mx-auto text-center">
           <h2
             className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)]"
