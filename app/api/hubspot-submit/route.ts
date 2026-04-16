@@ -18,8 +18,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Consent required" }, { status: 400 });
   }
 
+  const toNum = (v: unknown) => (typeof v === "number" && isFinite(v) ? String(v) : "");
+
   const payload = {
-    fields: [{ objectTypeId: "0-1", name: "email", value: email }],
+    fields: [
+      { objectTypeId: "0-1", name: "email", value: email },
+      { objectTypeId: "0-1", name: "roi_pallet_locations", value: toNum(body.palletLocations) },
+      { objectTypeId: "0-1", name: "roi_cycle_count_hours", value: toNum(body.cycleCountHours) },
+      { objectTypeId: "0-1", name: "roi_hours_per_shift", value: toNum(body.hoursPerShift) },
+      { objectTypeId: "0-1", name: "roi_shifts_per_day", value: toNum(body.shiftsPerDay) },
+      { objectTypeId: "0-1", name: "roi_forklift_drivers", value: toNum(body.forkliftDrivers) },
+      { objectTypeId: "0-1", name: "roi_labor_rate", value: toNum(body.laborRate) },
+      { objectTypeId: "0-1", name: "roi_total_savings", value: toNum(body.totalSavings) },
+      { objectTypeId: "0-1", name: "roi_calc_completed_date", value: new Date().toISOString().split("T")[0] },
+    ].filter((f) => f.value !== ""),
     context: {
       pageUri: req.headers.get("referer") ?? undefined,
       pageName: "ROI Calculator",

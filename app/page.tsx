@@ -152,6 +152,13 @@ export default function ROICalculator() {
         body: JSON.stringify({
           email: email.trim(),
           consent,
+          palletLocations,
+          cycleCountHours,
+          hoursPerShift,
+          shiftsPerDay,
+          forkliftDrivers,
+          laborRate,
+          totalSavings: Math.round(totalSavings),
         }),
       });
       if (!res.ok) {
