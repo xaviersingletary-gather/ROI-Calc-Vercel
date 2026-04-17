@@ -209,7 +209,7 @@ export default function ROICalculator() {
               className="mt-3 text-[var(--text-secondary)] leading-relaxed"
               style={{ letterSpacing: "-0.02em" }}
             >
-              Plug in your numbers. Watch the math work.
+              The savings aren't just from cycle counting. Enter your warehouse variables and see the full picture, across both automated floor scanning and dock-to-dock pallet visibility.
             </p>
           </div>
 
