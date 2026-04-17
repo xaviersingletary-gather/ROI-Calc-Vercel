@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 
 // ============================================================
@@ -97,6 +97,37 @@ export default function ROICalculator() {
   const [shiftsPerDay, setShiftsPerDay] = useState(2);
   const [forkliftDrivers, setForkliftDrivers] = useState(25);
   const [laborRate, setLaborRate] = useState(35);
+
+  const [copied, setCopied] = useState(false);
+
+  // --- hydrate from URL params ---
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    const clamp = (v: number, min: number, max: number) =>
+      Math.max(min, Math.min(max, v));
+    if (p.has("pallets")) setPalletLocations(clamp(Number(p.get("pallets")), 1000, 500000));
+    if (p.has("hours")) setCycleCountHours(clamp(Number(p.get("hours")), 1, 100));
+    if (p.has("shift")) setHoursPerShift(clamp(Number(p.get("shift")), 4, 12));
+    if (p.has("shifts")) setShiftsPerDay(clamp(Number(p.get("shifts")), 1, 3));
+    if (p.has("drivers")) setForkliftDrivers(clamp(Number(p.get("drivers")), 1, 200));
+    if (p.has("rate")) setLaborRate(clamp(Number(p.get("rate")), 15, 75));
+  }, []);
+
+  function handleShare() {
+    const params = new URLSearchParams({
+      pallets: String(palletLocations),
+      hours: String(cycleCountHours),
+      shift: String(hoursPerShift),
+      shifts: String(shiftsPerDay),
+      drivers: String(forkliftDrivers),
+      rate: String(laborRate),
+    });
+    const url = `${window.location.origin}${window.location.pathname}?${params}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
 
   // --- form state ---
   const [email, setEmail] = useState("");
@@ -303,6 +334,16 @@ export default function ROICalculator() {
                 {fmt(totalSavings / 12)}/month &middot;{" "}
                 {fmt(savingsPerLocation)} per pallet location
               </p>
+              <button
+                type="button"
+                onClick={handleShare}
+                className="mt-3 inline-flex items-center gap-1.5 text-xs text-white/50 hover:text-white/80 transition-colors"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m9.86-2.54a4.5 4.5 0 00-1.242-7.244l-4.5-4.5a4.5 4.5 0 00-6.364 6.364L4.25 8.81" />
+                </svg>
+                {copied ? "Link copied!" : "Share these results"}
+              </button>
 
               {/* Proportion bar */}
               <div className="mt-6">
