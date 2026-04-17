@@ -396,9 +396,8 @@ export default function ROICalculator() {
                       Thanks. We&rsquo;ve got your info.
                     </p>
                     <p className="mt-1.5 text-xs text-white/70 leading-relaxed">
-                      A Gather AI specialist will reach out within 1 business
-                      day to walk through {fmt(totalSavings)} in estimated
-                      annual savings.
+                      A team member will reach out within 1 business day to talk
+                      about a full ROI analysis of Gather AI.
                     </p>
                   </div>
                 ) : (
