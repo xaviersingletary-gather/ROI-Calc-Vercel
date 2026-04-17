@@ -99,6 +99,9 @@ export default function ROICalculator() {
   const [laborRate, setLaborRate] = useState(35);
 
   const [copied, setCopied] = useState(false);
+  const [showShareInput, setShowShareInput] = useState(false);
+  const [shareEmail, setShareEmail] = useState("");
+  const [shareEmailError, setShareEmailError] = useState("");
 
   // --- hydrate from URL params ---
   useEffect(() => {
@@ -113,7 +116,7 @@ export default function ROICalculator() {
     if (p.has("rate")) setLaborRate(clamp(Number(p.get("rate")), 15, 75));
   }, []);
 
-  function handleShare() {
+  function buildShareUrl() {
     const params = new URLSearchParams({
       pallets: String(palletLocations),
       hours: String(cycleCountHours),
@@ -122,11 +125,59 @@ export default function ROICalculator() {
       drivers: String(forkliftDrivers),
       rate: String(laborRate),
     });
-    const url = `${window.location.origin}${window.location.pathname}?${params}`;
-    navigator.clipboard.writeText(url).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    return `${window.location.origin}${window.location.pathname}?${params}`;
+  }
+
+  async function handleShare() {
+    const trimmed = shareEmail.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      setShareEmailError("Enter a valid email.");
+      return;
+    }
+    setShareEmailError("");
+
+    // Log the share event to Sheets and HubSpot
+    fetch("/api/capture", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: trimmed,
+        type: "share",
+        sharedBy: email,
+        palletLocations,
+        cycleCountHours,
+        hoursPerShift,
+        shiftsPerDay,
+        forkliftDrivers,
+        laborRate,
+        totalSavings: Math.round(totalSavings),
+      }),
+    }).catch(() => {});
+
+    fetch("/api/hubspot-submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: trimmed,
+        consent: true,
+        roi_shared_with: email,
+        palletLocations,
+        cycleCountHours,
+        hoursPerShift,
+        shiftsPerDay,
+        forkliftDrivers,
+        laborRate,
+        totalSavings: Math.round(totalSavings),
+      }),
+    }).catch(() => {});
+
+    const url = buildShareUrl();
+    await navigator.clipboard.writeText(url);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+      setShowShareInput(false);
+    }, 2000);
   }
 
   // --- form state ---
@@ -334,13 +385,45 @@ export default function ROICalculator() {
                 {fmt(totalSavings / 12)}/month &middot;{" "}
                 {fmt(savingsPerLocation)} per pallet location
               </p>
-              <button
-                type="button"
-                onClick={handleShare}
-                className="mt-4 bg-[var(--java)] text-[var(--panel-darker)] text-xs font-semibold py-2 px-4 rounded-lg hover:brightness-95 transition-[filter,transform] active:scale-[0.98]"
-              >
-                {copied ? "Link copied!" : "Share"}
-              </button>
+              {submitted && (
+                !showShareInput ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowShareInput(true)}
+                    className="mt-4 bg-[var(--java)] text-[var(--panel-darker)] text-xs font-semibold py-2 px-4 rounded-lg hover:brightness-95 transition-[filter,transform] active:scale-[0.98]"
+                  >
+                    Share
+                  </button>
+                ) : (
+                  <div className="mt-4 space-y-2">
+                    <label className="block text-xs text-white/60">
+                      Who are you sharing this with?
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        type="email"
+                        value={shareEmail}
+                        onChange={(e) => {
+                          setShareEmail(e.target.value);
+                          if (shareEmailError) setShareEmailError("");
+                        }}
+                        placeholder="colleague@company.com"
+                        className="flex-1 px-3 py-2 bg-white border border-transparent rounded-lg text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-[3px] focus:ring-[var(--java)]/30"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleShare}
+                        className="bg-[var(--java)] text-[var(--panel-darker)] text-xs font-semibold py-2 px-4 rounded-lg hover:brightness-95 transition-[filter,transform] active:scale-[0.98] whitespace-nowrap"
+                      >
+                        {copied ? "Copied!" : "Copy link"}
+                      </button>
+                    </div>
+                    {shareEmailError && (
+                      <p className="text-xs text-[#FF9285]">{shareEmailError}</p>
+                    )}
+                  </div>
+                )
+              )}
 
               {/* Proportion bar */}
               <div className="mt-6">

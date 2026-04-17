@@ -19,6 +19,8 @@ export async function POST(req: NextRequest) {
 
   const payload = JSON.stringify({
     email: body.email,
+    type: body.type || "submission",
+    sharedBy: body.sharedBy || "",
     palletLocations: body.palletLocations,
     cycleCountHours: body.cycleCountHours,
     hoursPerShift: body.hoursPerShift,

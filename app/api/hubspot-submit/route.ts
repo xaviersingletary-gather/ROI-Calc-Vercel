@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
   }
 
   const toNum = (v: unknown) => (typeof v === "number" && isFinite(v) ? String(v) : "");
+  const toStr = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : "");
 
   const payload = {
     fields: [
@@ -31,6 +32,7 @@ export async function POST(req: NextRequest) {
       { objectTypeId: "0-1", name: "roi_labor_rate", value: toNum(body.laborRate) },
       { objectTypeId: "0-1", name: "roi_total_savings", value: toNum(body.totalSavings) },
       { objectTypeId: "0-1", name: "roi_calc_completed_date", value: new Date().toISOString().split("T")[0] },
+      { objectTypeId: "0-1", name: "roi_shared_with", value: toStr(body.roi_shared_with) },
     ].filter((f) => f.value !== ""),
     context: {
       pageUri: req.headers.get("referer") ?? undefined,
