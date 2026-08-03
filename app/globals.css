@@ -122,3 +122,13 @@ body {
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ============================================================
+   Embed mode (?embed=1) — hide header/footer pre-hydration
+   when the calculator is iframed into a landing page
+   ============================================================ */
+
+html.embed header,
+html.embed footer {
+  display: none;
+}
+

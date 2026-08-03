@@ -103,9 +103,13 @@ export default function ROICalculator() {
   const [shareEmail, setShareEmail] = useState("");
   const [shareEmailError, setShareEmailError] = useState("");
 
+  // --- embed mode (?embed=1 hides header/footer for iframe use) ---
+  const [embed, setEmbed] = useState(false);
+
   // --- hydrate from URL params ---
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
+    setEmbed(p.has("embed"));
     const clamp = (v: number, min: number, max: number) =>
       Math.max(min, Math.min(max, v));
     if (p.has("pallets")) setPalletLocations(clamp(Number(p.get("pallets")), 1000, 500000));
@@ -115,6 +119,23 @@ export default function ROICalculator() {
     if (p.has("drivers")) setForkliftDrivers(clamp(Number(p.get("drivers")), 1, 200));
     if (p.has("rate")) setLaborRate(clamp(Number(p.get("rate")), 15, 75));
   }, []);
+
+  // --- report height to parent window when embedded in an iframe ---
+  useEffect(() => {
+    if (!embed) return;
+    const send = () =>
+      window.parent.postMessage(
+        {
+          type: "gather-roi-height",
+          height: document.documentElement.scrollHeight,
+        },
+        "*"
+      );
+    send();
+    const ro = new ResizeObserver(send);
+    ro.observe(document.body);
+    return () => ro.disconnect();
+  }, [embed]);
 
   function buildShareUrl() {
     const params = new URLSearchParams({
@@ -172,7 +193,19 @@ export default function ROICalculator() {
     }).catch(() => {});
 
     const url = buildShareUrl();
-    await navigator.clipboard.writeText(url);
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      // Fallback for cross-origin iframes where async clipboard is blocked
+      const ta = document.createElement("textarea");
+      ta.value = url;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    }
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
@@ -258,8 +291,13 @@ export default function ROICalculator() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--background)]">
+    <div
+      className={
+        embed ? "bg-[var(--background)]" : "min-h-screen bg-[var(--background)]"
+      }
+    >
       {/* ── Header ── */}
+      {!embed && (
       <header className="border-b border-[var(--border-subtle)] px-6 py-5">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Image
@@ -274,9 +312,10 @@ export default function ROICalculator() {
           </span>
         </div>
       </header>
+      )}
 
       {/* ── Calculator ── */}
-      <section className="px-6 pt-12 pb-16">
+      <section className={embed ? "px-6 pt-6 pb-10" : "px-6 pt-12 pb-16"}>
         <div className="max-w-6xl mx-auto">
           {/* Headline — full width on all breakpoints, always at top */}
           <div className="mb-10 lg:mb-12 max-w-2xl">
@@ -684,6 +723,7 @@ export default function ROICalculator() {
       </section>
 
       {/* ── Footer ── */}
+      {!embed && (
       <footer className="bg-[var(--panel-darker)] px-6 py-10">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <Image
@@ -702,6 +742,7 @@ export default function ROICalculator() {
           </div>
         </div>
       </footer>
+      )}
 
     </div>
   );

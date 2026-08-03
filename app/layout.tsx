@@ -25,6 +25,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable} h-full antialiased`}>
       <head>
+        {/* Blocking: hide page chrome before first paint when iframed (?embed=1) */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if(new URLSearchParams(window.location.search).has("embed"))document.documentElement.classList.add("embed");`,
+          }}
+        />
         <Script id="gtm" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
